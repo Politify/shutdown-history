@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
     <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
+
 <div class='timeline'>
     <h1>Timeline</h1>
     <svg id='time-viz' height=600 width=800></svg>
@@ -16,12 +16,9 @@
 <div id='length-wrapper'>
     <h1>Length of Shutdown</h1>
     <svg id='bar-viz' height=600 width=800></svg>
-
-    <div class='well' id='meta'></div>
 </div>
 
-
-<hr />
+<div class='well' id='meta'></div>
 Source: <a href='http://en.wikipedia.org/wiki/Government_shutdown_in_the_United_States'>http://en.wikipedia.org/wiki/Government_shutdown_in_the_United_States</a>
 
 
@@ -30,17 +27,44 @@ Source: <a href='http://en.wikipedia.org/wiki/Government_shutdown_in_the_United_
     Mouse over a shutdown to see more information
 </script>
 <script type='text/template' id='meta-template'>
-    <h2><%= data.president %></h2>
-    Started: <%= data.startDate %>. 
+    <h2
+        <% if (data.presidentParty === 'democrat'){ %>
+            class='dem'
+        <% } else { %>
+            class='rep'
+        <% } %>
+        ><%= data.president %></h2>
+    Started: <%= data.startDate %>
     <br />
     Duration: <% if (data.president === 'Obama'){ %> (Ongoing) <% } %>
         <%= Math.floor(data.numDays) %> days
 
     <br />
     <br />
-    House: <%= data.house[0].toUpperCase() + data.house.substring(1) %>
+    <h4> Senate: 
+        <span 
+        <% if (data.senate === 'democrat'){ %>
+            class='dem'
+        <% } else { %>
+            class='rep'
+        <% } %>
+        >
+            <%= data.senate[0].toUpperCase() + data.senate.substring(1) %> </h4>
+        </span>
+    <h4>House: 
+        <span 
+        <% if (data.house === 'democrat'){ %>
+            class='dem'
+        <% } else { %>
+            class='rep'
+        <% } %>
+        >
+            <%= data.house[0].toUpperCase() + data.house.substring(1) %></h4>
+        </span>
+
     <br />
-    Senate: <%= data.senate[0].toUpperCase() + data.senate.substring(1) %>
+    <h3>Description</h3>
+    <%= data.description %>
 </script>
 
 <!-- ============== Scripts ============= -->
@@ -57,7 +81,9 @@ window.shutdownData = [
         "president": "Ford",
         "presidentParty": "republican",
         "senate": "democrat",
-        "house": "democrat"
+        "house": "democrat",
+        "issue": "Spending for Labor and Health, Education, and Welfare",
+        "description": "Citing out of control spending, President Gerald Ford vetoed a funding bill for the United States Department of Labor and the United States Department of Health, Education, and Welfare (HEW), leading to a partial government shutdown. On October 1, the Democratically-controlled Congress overrode Ford's veto but it took until October 11 for a continuing resolution ending funding gaps for other parts of government to become law."
     },
     {
         "startDate": "09-30-1977",
@@ -65,7 +91,9 @@ window.shutdownData = [
         "president": "Carter",
         "presidentParty": "democrat",
         "senate": "democrat",
-        "house": "democrat"
+        "house": "democrat",
+        "issue": "Abortion",
+        "description": "The Democratically-controlled House continued to uphold the ban on using Medicaid dollars to pay for abortions, except in cases where the life of the mother was at stake. Meanwhile, the Democratic-controlled Senate pressed to loosen the ban to allow abortion funding in the case of rape or incest. A funding gap was created when disagreement over the issue between the houses had become tied to funding for the Departments of Labor and HEW, leading to a partial government shutdown. A temporary agreement was made to restore funding through October 31, 1977, allowing more time for Congress to resolve its dispute."
     },
     {
         "startDate": "10-31-1977",
@@ -73,7 +101,9 @@ window.shutdownData = [
         "president": "Carter",
         "presidentParty": "democrat",
         "senate": "democrat",
-        "house": "democrat"
+        "house": "democrat",
+        "issue": "Abortion",
+        "description": "The earlier temporary funding agreement expired. President Jimmy Carter signed a second funding agreement to allow for more time for negotiation."
     },
     {
         "startDate": "11-30-1977",
@@ -81,7 +111,9 @@ window.shutdownData = [
         "president": "Carter",
         "presidentParty": "democrat",
         "senate": "democrat",
-        "house": "democrat"
+        "house": "democrat",
+        "issue": "Abortion",
+        "description": "The second temporary funding agreement expired. The House held firm against the Senate in its effort to ban Medicaid paying for the abortions of victims of statutory rape. A deal was eventually struck which allowed Medicaid to pay for abortions in cases resulting from rape, incest, or in which the mother's health is at risk."
     },
     {
         "startDate": "09-30-1978",
@@ -89,7 +121,9 @@ window.shutdownData = [
         "president": "Carter",
         "presidentParty": "democrat",
         "senate": "democrat",
-        "house": "democrat"
+        "house": "democrat",
+        "issue": "Nuclear-powered aircraft carrier",
+        "description": "Deeming them wasteful, President Carter vetoed a public works appropriations bill and a defense bill including funding for a nuclear-powered aircraft carrier. Spending for the Department of HEW was also delayed over additional disputes concerning Medicaid funding for abortion."
     },
     {
         "startDate": "09-30-1979",
@@ -97,7 +131,9 @@ window.shutdownData = [
         "president": "Carter",
         "presidentParty": "democrat",
         "senate": "democrat",
-        "house": "democrat"
+        "house": "democrat",
+        "issue": "Higher Pay and Abortions",
+        "description": "Against the opposition of the Senate, the House pushed for a 5.5 percent pay increase for congress members and senior civil servants. The House also sought to restrict federal spending on abortion only to cases where the mother's life is in danger, while the Senate wanted to maintain funding for abortions in cases of rape and incest."
     },
     {
         "startDate": "11-20-1981",
@@ -105,7 +141,9 @@ window.shutdownData = [
         "president": "Reagan",
         "presidentParty": "republican",
         "senate": "republican",
-        "house": "democrat"
+        "house": "democrat",
+        "issue": "Raegan vetoing",
+        "description": "President Ronald Reagan pledged that he would veto any spending bill that failed to include at least half of the $8.4 billion in domestic budget cuts that he proposed. Although the Republican controlled Senate passed a bill that met his specifications, the Democratically controlled House insisted on larger cuts to defense than Reagan wanted as well as pay raises for congress and senior civil servants. A compromise bill fell $2 billion short of the cuts Reagan wanted, so Reagan vetoed the bill and shut down the federal government. A temporary bill restored spending through 15 December and gave Congress the time to work out a more lasting deal."
     },
     {
         "startDate": "09-30-1982",
@@ -113,7 +151,9 @@ window.shutdownData = [
         "president": "Reagan",
         "presidentParty": "republican",
         "senate": "republican",
-        "house": "democrat"
+        "house": "democrat",
+        "cause": "Laziness",
+        "description": "Congress passed the required spending bills a day late."
     },
     {
         "startDate": "12-17-1982",
@@ -121,7 +161,9 @@ window.shutdownData = [
         "president": "Reagan",
         "presidentParty": "republican",
         "senate": "republican",
-        "house": "democrat"
+        "house": "democrat",
+        "issue": "Increased education funding / Missle Funding",
+        "description": "The House and Senate wished to fund job programs, but President Reagan vowed to veto any such legislation. The House also opposed plans to fund the MX missile. The shutdown ended after Congress abandoned their jobs plan, but Reagan was forced to yield on funding for both the MX and Pershing II missiles. He also accepted funding for the Legal Services Corporation, which he wanted abolished, in exchange for higher foreign aid to Israel."
     },
     {
         "startDate": "11-10-1983",
@@ -129,7 +171,9 @@ window.shutdownData = [
         "president": "Reagan",
         "presidentParty": "republican",
         "senate": "republican",
-        "house": "democrat"
+        "house": "democrat",
+        "issue": "Increased education function, decreased military funding",
+        "description": "The House increased education funding but cut defense and foreign aid spending, which led to a dispute with President Reagan. Eventually, the House reduced their proposed education funding, and also accepted funding for the MX missile. However, the foreign aid and defense cuts remained, and oil and gas leasing was banned in federal wildlife refuges. Abortion was also prohibited from being paid for with government employee health insurance."
     },
     {
         "startDate": "09-30-1984",
@@ -137,7 +181,9 @@ window.shutdownData = [
         "president": "Reagan",
         "presidentParty": "republican",
         "senate": "republican",
-        "house": "democrat"
+        "house": "democrat",
+        "issue": "Crime fighting / Civil rights",
+        "description": "The House wished to link the budget to both a crime-fighting package President Reagan supported and a water projects package he did not. The Senate additionally tied the budget to a civil rights measure designed to overturn Grove City v. Bell. Reagan proposed a compromise where he abandoned his crime package in exchange for Congress dropping the water projects package. A deal was not struck, and a three-day spending extension was passed instead."
     },
     {
         "startDate": "10-03-1984",
@@ -145,7 +191,9 @@ window.shutdownData = [
         "president": "Reagan",
         "presidentParty": "republican",
         "senate": "republican",
-        "house": "democrat"
+        "house": "democrat",
+        "issue": "Crime fighting / Civil rights",
+        "description": "The 3 October spending extension expired, forcing a shutdown. Congress dropped their proposed water and civil rights packages, while President Reagan kept his crime package. Funding for aid to the Nicaraguan Contras was also passed."
     },
     {
         "startDate": "10-16-1986",
@@ -153,7 +201,9 @@ window.shutdownData = [
         "president": "Reagan",
         "presidentParty": "republican",
         "senate": "republican",
-        "house": "democrat"
+        "house": "democrat",
+        "issue": "Various - Welfare, Labor",
+        "description": "Disputes over multiple issues between the House and President Reagan and the Republican Senate forced a shutdown. The House dropped many of their demands in exchange for a vote on their welfare package, and a concession of the sale of then-government-owned Conrail."
     },
     {
         "startDate": "12-18-1987",
@@ -161,7 +211,9 @@ window.shutdownData = [
         "president": "Reagan",
         "presidentParty": "republican",
         "senate": "democrat",
-        "house": "democrat"
+        "house": "democrat",
+        "issue": "Contra Funding / Fairness Doctrine",
+        "description": "The House and Senate opposed funding for the Contras and wanted the Federal Communications Commission to renew enforcement of the 'Fairness Doctrine'. They yielded on the 'Fairness Doctrine' issue in exchange for non-lethal aid to the Contras."
     },
     {
         "startDate": "10-05-1990",
@@ -169,7 +221,9 @@ window.shutdownData = [
         "president": "G.H.W. Bush",
         "presidentParty": "republican",
         "senate": "democrat",
-        "house": "democrat"
+        "house": "democrat",
+        "issue": "Veto for no deficit reduction package",
+        "description": "President George H.W. Bush vowed to veto any continuing resolution that was not paired with a deficit reduction package, and did so when one reached his desk. The House failed to override his veto before a shutdown occurred. Congress then passed a continuing resolution with a deficit reduction package to end the shutdown."
     },
     {
         "startDate": "11-13-1995",
@@ -177,7 +231,9 @@ window.shutdownData = [
         "president": "Clinton",
         "presidentParty": "democrat",
         "senate": "republican",
-        "house": "republican"
+        "house": "republican",
+        "issue": "Veto on resolution to raise medicare premiums, lessen environmental regulations",
+        "description": "President Bill Clinton vetoed a continuing resolution passed by the Republican-controlled Congress. A deal was reached allowing for 75-percent funding for four weeks, and Clinton agreed to a seven-year timetable for a balanced budget."
     },
     {
         "startDate": "12-15-1995",
@@ -185,7 +241,9 @@ window.shutdownData = [
         "president": "Clinton",
         "presidentParty": "democrat",
         "senate": "republican",
-        "house": "republican"
+        "house": "republican",
+        "issue": "Proposal using CBO numbers",
+        "description": "The Republicans demanded that President Clinton propose a budget with the seven-year timetable using Congressional Budget Office numbers, rather than Clinton's Office of Management and Budget numbers. However, Clinton refused. Eventually, Congress and Clinton agreed to pass a compromise budget."
     },
     {
         "startDate": "09-30-2013",
@@ -193,7 +251,9 @@ window.shutdownData = [
         "president": "Obama",
         "presidentParty": "democrat",
         "senate": "democrat",
-        "house": "republican"
+        "house": "republican",
+        "issue": "Healthcare",
+        "description": "Due to disagreement regarding inclusion of language defunding or delaying the Affordable Care Act, the Government has not passed a funding bill. The House continues to offer bills to fund important, non-contested agencies, but the Senate, controlled by Harry Reid, has not considered them. The shutdown is currently in progress."
     }
 ];
 </script>

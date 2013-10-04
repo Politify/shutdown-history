@@ -5,7 +5,7 @@
       });
     };
 
-    // data
+    // Setup data
     var data = window.shutdownData;
 
     // get number of days
@@ -84,15 +84,15 @@
     function drawTimeline(){
         // Draws a timeline, interacts with shutdown length viz
         // setup scale
-        var width = 1400;
-        var height = 130;
+        var width = $(window).width() - 50;
+        var height = 90;
 
-        var margin = {top: 20, right: 20, bottom: 65, left: 30};
-        var svg = d3.select('#time-viz').attr({ 
+        var margin = {top: 20, right: 20, bottom: 20, left: 30};
+        var baseSvg = d3.select('#time-viz').attr({ 
                 height: height,
                 width: width
-            })
-            .append('g')
+            });
+        var svg = baseSvg.append('g')
                 .attr({
                     transform: "translate(" + margin.left + "," + margin.top + ")"
                 });
@@ -228,15 +228,15 @@
     // ----------------------------------
     function drawBars(){
         // Setup SVG 
-        var width = 1000;
-        var height = 330;
+        var width = $(window).width() - 50;
+        var height = 300;
 
-        var margin = {top: 20, right: 95, bottom: 65, left: 60};
-        var svg = d3.select('#bar-viz').attr({ 
+        var margin = {top: 20, right: 95, bottom: 65, left: 260};
+        var baseSvg = d3.select('#bar-viz').attr({ 
                 height: height,
                 width: width
-            })
-            .append('g')
+            });
+        var svg = baseSvg.append('g')
                 .attr({
                     transform: "translate(" + margin.left + "," + margin.top + ")"
                 });
@@ -381,7 +381,7 @@
                 y: chartHeight + margin.bottom - 5,
                 x: (chartWidth / 2) - 50
             })
-            .text('President');
+            .text('Shutdowns');
 
         chart.append('text')
             .attr({
@@ -407,6 +407,95 @@
                 y: yScale(average),
                 x: chartWidth + 4
             }).text('Average: ' + (Math.round(average * 10) / 10) + ' days');
+
+
+        // Legend
+        // ------------------------------
+        var legendX = 105;
+        var legendY = 25;
+        var legendGroup = baseSvg.append('g')
+            .attr({
+                'class': 'legendGroup',
+                transform: 'translate(15,40)'
+            });
+
+        legendGroup.append('rect')
+            .attr({
+                'class': 'legendBox',
+                x: 0,
+                y: 0,
+                height: 205,
+                width: 160
+            });
+        legendGroup.append('text')
+            .attr({ 
+                'class': 'legendTitle',
+                x: 100,
+                y: legendY
+            }).text('Legend');
+
+        // president bar
+        legendGroup.append('rect')
+            .attr({
+                x: legendX, 
+                'class': 'legendPresident legendRect dem',
+                width: barWidth,
+                height: 100,
+                y: legendY + 20
+            });
+
+        legendGroup.append('rect')
+            .attr({
+                x: legendX, 
+                'class': 'legendSenate legendRect dem',
+                width: barWidth / 2 - 1,
+                height: 26,
+                y: legendY + 124
+            });
+        legendGroup.append('rect')
+            .attr({
+                x: legendX + (barWidth / 2), 
+                'class': 'legendHouse legendRect rep',
+                width: barWidth / 2,
+                height: 26,
+                y: legendY + 124
+            });
+
+        // labels
+        legendGroup.append('text')
+            .attr({
+                x: 100,
+                y: 90
+            })
+            .text('President Party');
+
+        legendGroup.append('text')
+            .attr({
+                x: 90,
+                y: 165
+            })
+            .text('Senate');
+        legendGroup.append('line')
+            .attr({
+                x1: 95,
+                x2: 105,
+                y1: 162,
+                y2: 162 
+            });
+
+        legendGroup.append('text')
+            .attr({
+                x: 155,
+                y: 195 
+            })
+            .text('House');
+        legendGroup.append('line')
+            .attr({
+                x1: 135,
+                x2: 135,
+                y1: 185,
+                y2: 175
+            });
     }
 
     drawBars();

@@ -1,19 +1,24 @@
 /* Meta */
+
+h1 {
+    margin-top: 0.1em;
+    padding-top: 0.1em;
+}
 #length-wrapper {
     position: relative;
 }
 
 #meta {
-    height: 200px;
-    overflow: hidden;
-    position: absolute;
-    right: 1em;
-    top: 0;
-    width: 300px;
 }
 #meta h2 {
     padding-top: .2em;
     margin-top: .2em;
+}
+#meta .rep {
+    color: #dd2222;
+}
+#meta .dem {
+    color: #336699;
 }
 
 /* Base SVG */
@@ -103,4 +108,20 @@ circle {
 }
 #bar-viz .inactive {
     opacity: 0.2;
+}
+
+/* Legend */
+.legendBox {
+    stroke: #bcbcbc;
+    fill: #e0e0e0;
+}
+.legendTitle {
+    font-size: 1.2em;
+    text-decoration: underline;
+}
+.legendGroup text {
+    text-anchor: end;
+}
+.legendGroup line {
+    stroke: #707070;
 }
