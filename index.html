@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+<div class='timeline'>
+    <h1>Timeline</h1>
+    <svg id='time-viz' height=600 width=800></svg>
+</div>
+
+<div id='length-wrapper'>
+    <h1>Length of Shutdown</h1>
+    <svg id='bar-viz' height=600 width=800></svg>
+
+    <div class='well' id='meta'></div>
+</div>
+
+
+<hr />
+Source: <a href='http://en.wikipedia.org/wiki/Government_shutdown_in_the_United_States'>http://en.wikipedia.org/wiki/Government_shutdown_in_the_United_States</a>
+
+
+<!-- ============== Templates ============= -->
+<script type='text/template' id='meta-template-base'>
+    Mouse over a shutdown to see more information
+</script>
+<script type='text/template' id='meta-template'>
+    <h2><%= data.president %></h2>
+    Started: <%= data.startDate %>. 
+    <br />
+    Duration: <% if (data.president === 'Obama'){ %> (Ongoing) <% } %>
+        <%= Math.floor(data.numDays) %> days
+
+    <br />
+    <br />
+    House: <%= data.house[0].toUpperCase() + data.house.substring(1) %>
+    <br />
+    Senate: <%= data.senate[0].toUpperCase() + data.senate.substring(1) %>
+</script>
+
+<!-- ============== Scripts ============= -->
+<script src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/d3/3.3.3/d3.min.js'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js'></script>
+
+<script>
+<!-- Embed data -->
+window.shutdownData = [
+    {
+        "startDate": "09-30-1976",
+        "endDate": "10-11-1976",
+        "president": "Ford",
+        "presidentParty": "republican",
+        "senate": "democrat",
+        "house": "democrat"
+    },
+    {
+        "startDate": "09-30-1977",
+        "endDate": "10-13-1977",
+        "president": "Carter",
+        "presidentParty": "democrat",
+        "senate": "democrat",
+        "house": "democrat"
+    },
+    {
+        "startDate": "10-31-1977",
+        "endDate": "11-09-1977",
+        "president": "Carter",
+        "presidentParty": "democrat",
+        "senate": "democrat",
+        "house": "democrat"
+    },
+    {
+        "startDate": "11-30-1977",
+        "endDate": "12-09-1977",
+        "president": "Carter",
+        "presidentParty": "democrat",
+        "senate": "democrat",
+        "house": "democrat"
+    },
+    {
+        "startDate": "09-30-1978",
+        "endDate": "10-18-1978",
+        "president": "Carter",
+        "presidentParty": "democrat",
+        "senate": "democrat",
+        "house": "democrat"
+    },
+    {
+        "startDate": "09-30-1979",
+        "endDate": "10-12-1979",
+        "president": "Carter",
+        "presidentParty": "democrat",
+        "senate": "democrat",
+        "house": "democrat"
+    },
+    {
+        "startDate": "11-20-1981",
+        "endDate": "11-23-1981",
+        "president": "Reagan",
+        "presidentParty": "republican",
+        "senate": "republican",
+        "house": "democrat"
+    },
+    {
+        "startDate": "09-30-1982",
+        "endDate": "10-02-1982",
+        "president": "Reagan",
+        "presidentParty": "republican",
+        "senate": "republican",
+        "house": "democrat"
+    },
+    {
+        "startDate": "12-17-1982",
+        "endDate": "12-21-1982",
+        "president": "Reagan",
+        "presidentParty": "republican",
+        "senate": "republican",
+        "house": "democrat"
+    },
+    {
+        "startDate": "11-10-1983",
+        "endDate": "11-14-1983",
+        "president": "Reagan",
+        "presidentParty": "republican",
+        "senate": "republican",
+        "house": "democrat"
+    },
+    {
+        "startDate": "09-30-1984",
+        "endDate": "10-03-1984",
+        "president": "Reagan",
+        "presidentParty": "republican",
+        "senate": "republican",
+        "house": "democrat"
+    },
+    {
+        "startDate": "10-03-1984",
+        "endDate": "10-05-1984",
+        "president": "Reagan",
+        "presidentParty": "republican",
+        "senate": "republican",
+        "house": "democrat"
+    },
+    {
+        "startDate": "10-16-1986",
+        "endDate": "10-18-1986",
+        "president": "Reagan",
+        "presidentParty": "republican",
+        "senate": "republican",
+        "house": "democrat"
+    },
+    {
+        "startDate": "12-18-1987",
+        "endDate": "12-20-1987",
+        "president": "Reagan",
+        "presidentParty": "republican",
+        "senate": "democrat",
+        "house": "democrat"
+    },
+    {
+        "startDate": "10-05-1990",
+        "endDate": "10-09-1990",
+        "president": "G.H.W. Bush",
+        "presidentParty": "republican",
+        "senate": "democrat",
+        "house": "democrat"
+    },
+    {
+        "startDate": "11-13-1995",
+        "endDate": "11-19-1995",
+        "president": "Clinton",
+        "presidentParty": "democrat",
+        "senate": "republican",
+        "house": "republican"
+    },
+    {
+        "startDate": "12-15-1995",
+        "endDate": "01-06-1996",
+        "president": "Clinton",
+        "presidentParty": "democrat",
+        "senate": "republican",
+        "house": "republican"
+    },
+    {
+        "startDate": "09-30-2013",
+        "endDate": new Date().toISOString().substring(0,10),
+        "president": "Obama",
+        "presidentParty": "democrat",
+        "senate": "democrat",
+        "house": "republican"
+    }
+];
+</script>
+
+<script src='shutdown.js'></script>
+</body>
+</html>
